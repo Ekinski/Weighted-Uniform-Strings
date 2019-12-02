@@ -1,0 +1,72 @@
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+using System.Text;
+using System;
+
+class Solution {
+
+    // Complete the weightedUniformStrings function below.
+    static string[] weightedUniformStrings(string s, int[] queries) {
+        
+        Dictionary<int, bool> alpha = new Dictionary<int, bool>(); 
+        string[] answer = new string[queries.Length];
+        char previous = '0';
+        int count = 1;
+        for ( int a = 0; a < s.Length; a++){
+            int num = (s[a] - 'a' +1);
+            
+            if (previous == s[a]){
+                count ++;
+            } else {
+                count = 1;
+                previous = s[a];
+            }
+            num = num * count;
+            if (!alpha.ContainsKey(num)){
+                alpha.Add(num, true);
+            }
+            
+        }
+
+        for (int b = 0; b < queries.Length; b++){
+        if (alpha.ContainsKey(queries[b])){
+            answer[b] = "Yes";
+        } else {
+            answer[b] = "No";
+            }
+        }
+        
+        return answer;
+    }
+
+    static void Main(string[] args) {
+        TextWriter textWriter = new StreamWriter(@System.Environment.GetEnvironmentVariable("OUTPUT_PATH"), true);
+
+        string s = Console.ReadLine();
+
+        int queriesCount = Convert.ToInt32(Console.ReadLine());
+
+        int[] queries = new int [queriesCount];
+
+        for (int i = 0; i < queriesCount; i++) {
+            int queriesItem = Convert.ToInt32(Console.ReadLine());
+            queries[i] = queriesItem;
+        }
+
+        string[] result = weightedUniformStrings(s, queries);
+
+        textWriter.WriteLine(string.Join("\n", result));
+
+        textWriter.Flush();
+        textWriter.Close();
+    }
+}
